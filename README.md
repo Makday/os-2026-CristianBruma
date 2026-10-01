@@ -1,0 +1,1 @@
+# This repository contains laboratory works for the Operating Systems course, Software Engineering specialty, at Technical University of Moldova, year 3.
