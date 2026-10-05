@@ -8,7 +8,7 @@
 
 ### Observations
 
-1. List three programs xv6 ships with.
+**1. List three programs xv6 ships with.**
 
 ![](image.png)
 ![](image-1.png)
@@ -18,7 +18,7 @@
 
 ---
 
-2. You just used a pipe ( | ) inside xv6. Which two OS features must exist for a pipe to work?
+**2. You just used a pipe ( | ) inside xv6. Which two OS features must exist for a pipe to work?**
 
 ![](image-2.png)
 
@@ -26,7 +26,7 @@ The OS must have process management, since it creates two separate processes (`l
 
 ---
 
-3. In one sentence: how does the xv6 shell compare to the Linux shell from Lab 1?
+**3. In one sentence: how does the xv6 shell compare to the Linux shell from Lab 1?**
 
 `xv6` seems like a minimal version of Linux, because of its lack of several additional tools.
 
@@ -36,7 +36,7 @@ The OS must have process management, since it creates two separate processes (`l
 
 ### Observations
 
-1. Which system calls does user/cat.c use, and what does each one ask the kernel to do? 
+**1. Which system calls does user/cat.c use, and what does each one ask the kernel to do?**
 
 ![](image-3.png)
 
@@ -49,7 +49,7 @@ The OS must have process management, since it creates two separate processes (`l
 
 ---
 
-2. In which kernel file, and on which line, is sys_read implemented?
+**2. In which kernel file, and on which line, is sys_read implemented?**
 
 ![](image-4.png)
 
@@ -57,6 +57,6 @@ The OS must have process management, since it creates two separate processes (`l
 
 ---
 
-3. In one sentence: what is the difference between the code in kernel/ and the code in user/?
+**3. In one sentence: what is the difference between the code in kernel/ and the code in user/?**
 
 The code in `kernel/` runs in privileged mode, while code in `user/` runs in user-mode.

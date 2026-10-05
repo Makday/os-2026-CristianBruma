@@ -10,7 +10,7 @@ I found it interesting how Linux has the filesystem as one unified tree, unlike 
 
 ### Observations
 
-1. Who owns the files you just created, and which group? 
+**1. Who owns the files you just created, and which group?**
 
 ![](image.png)
 
@@ -18,7 +18,7 @@ The file `note.txt` is owned by the user that created it, `vboxuser`, which is a
 
 ---
 
-2. What do the ten characters at the start of `ls -l` mean for note.txt after chmod 600?
+**2. What do the ten characters at the start of `ls -l` mean for note.txt after chmod 600?**
 
 ![](image-1.png)
 
@@ -26,7 +26,7 @@ The `-rw-------` is a permission string. Here it means that the file can be read
 
 ---
 
-3. Name two directories directly under / and say, in one line each, what they hold.
+**3. Name two directories directly under / and say, in one line each, what they hold.**
 
 ![](image-2.png)
 
@@ -47,7 +47,7 @@ I found it fascinating how processes on Linux can be expressed through files in 
 
 ### Observations
 
-1. What is the PID of process number 1, and what is it (look it up)? 
+**1. What is the PID of process number 1, and what is it (look it up)?**
 
 ![](image-3.png)
 ![](image-4.png)
@@ -57,7 +57,7 @@ Otherwise, the question could mean what the process with PID = 1 **is**. In this
 
 ---
 
-2. Roughly how many processes were running on your idle VM?
+**2. Roughly how many processes were running on your idle VM?**
 
 ![](image-5.png)
 
@@ -65,7 +65,7 @@ Otherwise, the question could mean what the process with PID = 1 **is**. In this
 
 ---
 
-3. From /proc/<pid>/status, what does the "State:" line say for your sleeping process?
+**3. From /proc/<pid>/status, what does the "State:" line say for your sleeping process?**
 
 ![](image-6.png)
 
@@ -83,7 +83,7 @@ It was interesting to find out about the concept of swap memory. I did not know 
 
 ### Observations
 
-1. How much total RAM does the VM have, and how much is free? 
+**1. How much total RAM does the VM have, and how much is free?**
 
 ![](image-7.png)
 
@@ -91,7 +91,7 @@ According to `free -h`, the VM has **3.3GiB** in total, with **245MiB** absolute
 
 ---
 
-2. What is swap, and how much is configured? 
+**2. What is swap, and how much is configured?**
 
 ![](image-7.png)
 
@@ -99,7 +99,7 @@ The swap memory is disk space the OS uses as an extension of RAM and it acts as 
 
 ---
 
-3. How much resident memory (VmRSS) does a bare `sleep` process use, and does that surprise you?
+**3. How much resident memory (VmRSS) does a bare `sleep` process use, and does that surprise you?**
 
 ![](image-8.png)
 
@@ -117,7 +117,7 @@ The fact that the system can communicate to devices via files in `/dev/`, solidi
 
 ### Observations
 
-1. Which device is your root filesystem "/" mounted on?
+**1. Which device is your root filesystem "/" mounted on?**
 
 ![](image-9.png)
 
@@ -127,13 +127,13 @@ The fact that the system can communicate to devices via files in `/dev/`, solidi
 
 ![](image-10.png)
 
-2. Give one entry from /dev and say what real thing it stands for. 
+**2. Give one entry from /dev and say what real thing it stands for.**
 
 `/dev/bus/` represents the direct access to hardware buses. It can be used for gaining access to USB via `/dev/bus/usb/`.
 
 ---
 
-3. In one sentence: what does "everything is a file" mean, based on what you saw?
+**3. In one sentence: what does "everything is a file" mean, based on what you saw?**
 
 "Everything is a file" is the philosophy of the OS that expresses as files not only plain data, but also the hardware (files in `/dev/`) and even the processes (files in `/proc/`), for simplicity.
 
