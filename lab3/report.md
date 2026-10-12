@@ -6,7 +6,7 @@
 
 **1. Which of cd, ls, echo are built-ins, and why MUST cd be one?**
 
-![types](image.png)
+![types](screenshots/image.png)
 
 - `cd` is a shell builtin;
 - `ls` is an external command;
@@ -20,11 +20,11 @@ The file `note.txt` is owned by the user that created it, `vboxuser`, which is a
 
 **2.  How many directories are in your PATH, and in which one is ls?**
 
-![folders](image-1.png)
+![folders](screenshots/image-1.png)
 
 There are 9 directories in `$PATH`.
 
-![ls_location](image-2.png)
+![ls_location](screenshots/image-2.png)
 
 `ls` is in `/usr/bin/ls`.
 
@@ -32,7 +32,7 @@ There are 9 directories in `$PATH`.
 
 **3. What exit code does a command that is not found return?**
 
-![exit_code](image-3.png)
+![exit_code](screenshots/image-3.png)
 
 `127`.
 
@@ -40,7 +40,7 @@ There are 9 directories in `$PATH`.
 
 **4. Which option of ls sorts by modification time? (find it in man ls)**
 
-![ls_modification_time](image-4.png)
+![ls_modification_time](screenshots/image-4.png)
 
 `-t`.
 
@@ -50,11 +50,11 @@ There are 9 directories in `$PATH`.
 
 ### Observations
 
-![files_created](image-5.png)
+![files_created](screenshots/image-5.png)
 
 **1. For each line: your prediction, the real output, and one sentence if they differ.**
 
-![real_outputs](image-6.png)
+![real_outputs](screenshots/image-6.png)
 
 | Command           | My Predictions            | Real output           | Explanation (if different) |
 |----------         |----------                 |----------             |----------|
@@ -73,7 +73,7 @@ There are 9 directories in `$PATH`.
 
 **2.  `echo` knows nothing about files, yet `echo *.c` printed file names. Who produced them?**
 
-![globbing](image-7.png)
+![globbing](screenshots/image-7.png)
 
 It's the shell, it does globbing.
 
@@ -81,7 +81,7 @@ It's the shell, it does globbing.
 
 **3. Why did `ls alfa beta.txt` fail? Give two different ways to fix it.**
 
-![ls_error_fixes](image-8.png)
+![ls_error_fixes](screenshots/image-8.png)
 
 It failed because the name of the file was given by spaces and thus was treated as two arguments, `alfa` and `beta.txt`.
 
@@ -91,7 +91,7 @@ To fix it, use double quotes(`ls "alfa beta.txt"`) or single quotes(`ls 'alfa be
 
 **4. What is the difference between single and double quotes?**
 
-![single_double_quotes](image-9.png)
+![single_double_quotes](screenshots/image-9.png)
 
 - 'single quotes' stop everything: the text is taken literally.
 - "double quotes" keep spaces but still expand `$variables`.
@@ -104,7 +104,7 @@ To fix it, use double quotes(`ls "alfa beta.txt"`) or single quotes(`ls 'alfa be
 
 **1. Which file got the error message, and which got the listing?**
 
-![outputs_error_listings](image-10.png)
+![outputs_error_listings](screenshots/image-10.png)
 
 `out.txt` got the listing and `err.txt` got the error message.
 
@@ -112,7 +112,7 @@ To fix it, use double quotes(`ls "alfa beta.txt"`) or single quotes(`ls 'alfa be
 
 **2. What is the difference between `> all.txt 2>&1` and `2>&1 > all.txt` ? Try both and explain why the result differs.**
 
-![order_redirections](image-11.png)
+![order_redirections](screenshots/image-11.png)
 
 In the case of `> all.txt 2>&1`, the `file descriptor 1` is pointing to `all.txt`, while in the case of `2>&1 > all.txt`, the `file descriptor 1` points to the terminal.
 
@@ -120,7 +120,7 @@ In the case of `> all.txt 2>&1`, the `file descriptor 1` is pointing to `all.txt
 
 **3. Why does `wc -l < access.log` print only a number, while `wc -l access.log` also prints the file name?**
 
-![wc_access_log](image-12.png)
+![wc_access_log](screenshots/image-12.png)
 
 In the case of `wc -l < access.log`, the shell opens `access.log` and passes its content to `stdin` of `wc`, `wc` has no filename argument. While in the case of `wc -l access.log`, `wc` opens `access.log` itself, knows the name and prints both.
 
@@ -128,13 +128,13 @@ In the case of `wc -l < access.log`, the shell opens `access.log` and passes its
 
 **4.  Explain each operator in one sentence: ; && || .**
 
-![chaining_operators](image-13.png)
+![chaining_operators](screenshots/image-13.png)
 
 - `;` run the next one no matter what.
 - `&&` run the next one only if this one succeeded (exit code 0).
 - `||` run the next one only if this one failed.
 
-![run_background_job_kill](image-14.png)
+![run_background_job_kill](screenshots/image-14.png)
 
 ---
 
@@ -144,7 +144,7 @@ In the case of `wc -l < access.log`, the shell opens `access.log` and passes its
 
 **1. How many requests failed?**
 
-![count_fail_requests](image-15.png)
+![count_fail_requests](screenshots/image-15.png)
 
 Command used: `grep FAIL access.log | wc -l`
 
@@ -154,7 +154,7 @@ Command used: `grep FAIL access.log | wc -l`
 
 **2. How many different pages were requested, and which?**
 
-![diff_pages_which](image-16.png)
+![diff_pages_which](screenshots/image-16.png)
 
 Command used: `cut -d' ' -f5 access.log | sort | uniq -c | sort -rn | tee /dev/stderr | wc -l`
 
@@ -164,7 +164,7 @@ There are 4 distinct pages: `/page0`, `/page1`, `/page2`, `/page3`.
 
 **3. How many requests did each page get?**
 
-![diff_pages_which](image-16.png)
+![diff_pages_which](screenshots/image-16.png)
 
 
 Command used: `cut -d' ' -f5 access.log | sort | uniq -c | sort -rn | tee /dev/stderr | wc -l`
@@ -175,7 +175,7 @@ Each page got 125 requests.
 
 **4. Which user or users have the most failed requests, and how many?**
 
-![user_fails](image-17.png)
+![user_fails](screenshots/image-17.png)
 
 
 Command used: `grep FAIL access.log | cut -d' ' -f3 | sort | uniq -c | sort -rn`
@@ -186,7 +186,7 @@ Command used: `grep FAIL access.log | cut -d' ' -f3 | sort | uniq -c | sort -rn`
 
 **5. How many requests did user3 make, and how many of them failed?**
 
-![user3_requests](image-18.png)
+![user3_requests](screenshots/image-18.png)
 
 Command used: `grep user3 access.log | cut -d' ' -f4 | sort | uniq -c`
 
@@ -197,7 +197,7 @@ Command used: `grep user3 access.log | cut -d' ' -f4 | sort | uniq -c`
 
 **6. Print the last 3 failed requests, showing only time and user.**
 
-![last_three_fails](image-20.png)
+![last_three_fails](screenshots/image-20.png)
 
 Command used: `grep FAIL access.log | tail -3 | cut -d' ' -f1,2,3`
 
@@ -205,7 +205,7 @@ Command used: `grep FAIL access.log | tail -3 | cut -d' ' -f1,2,3`
 
 **7. Which login shells appear in /etc/passwd, and how many accounts use each? (field 7, separator :)**
 
-![login_shells](image-21.png)
+![login_shells](screenshots/image-21.png)
 
 Command used: `cut -d: -f7 /etc/passwd | sort | uniq -c | sort -rn`
 
@@ -213,7 +213,7 @@ Command used: `cut -d: -f7 /etc/passwd | sort | uniq -c | sort -rn`
 
 **8. PREDICT, then explain: why do `ls /etc | wc -l` and `ls -l /etc | wc -l` differ by exactly one?**
 
-![diff_by_one](image-22.png)
+![diff_by_one](screenshots/image-22.png)
 
 The `ls -l /etc` also prints one line for `total`.
 
@@ -223,6 +223,6 @@ The `ls -l /etc` also prints one line for `total`.
 
 ### Observations
 
-![contents_report_sh](image-23.png)
-![successful_run](image-24.png)
-![failed_run](image-25.png)
+![contents_report_sh](screenshots/image-23.png)
+![successful_run](screenshots/image-24.png)
+![failed_run](screenshots/image-25.png)
