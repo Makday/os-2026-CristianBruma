@@ -14,8 +14,6 @@
 
 `cd` **must** be a shell built-in command, because it changes shell's directory.
 
-The file `note.txt` is owned by the user that created it, `vboxuser`, which is also the group assigned to it. The group is named the same as the user because by default, the primary group is assigned, which is the private group created per user.
-
 ---
 
 **2.  How many directories are in your PATH, and in which one is ls?**
