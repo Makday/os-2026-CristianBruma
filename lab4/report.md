@@ -1,228 +1,152 @@
-# Lab 4: TThe xv6 Shellfrom the Outside
+# Lab 4: The xv6 Shellfrom the Outside
 
-## Part 1. Move fast,find help
-
-### Observations
-
-**1. Which of cd, ls, echo are built-ins, and why MUST cd be one?**
-
-![types](screenshots/image.png)
-
-- `cd` is a shell builtin;
-- `ls` is an external command;
-- `echo` is a shell builtin.
-
-`cd` **must** be a shell built-in command, because it changes shell's directory.
-
-The file `note.txt` is owned by the user that created it, `vboxuser`, which is also the group assigned to it. The group is named the same as the user because by default, the primary group is assigned, which is the private group created per user.
-
----
-
-**2.  How many directories are in your PATH, and in which one is ls?**
-
-![folders](screenshots/image-1.png)
-
-There are 9 directories in `$PATH`.
-
-![ls_location](screenshots/image-2.png)
-
-`ls` is in `/usr/bin/ls`.
-
----
-
-**3. What exit code does a command that is not found return?**
-
-![exit_code](screenshots/image-3.png)
-
-`127`.
-
----
-
-**4. Which option of ls sorts by modification time? (find it in man ls)**
-
-![ls_modification_time](screenshots/image-4.png)
-
-`-t`.
-
----
-
-## Part 2. Move fast,find help
+## Part 1. Fix sleep for the current xv6
 
 ### Observations
 
-![files_created](screenshots/image-5.png)
+![grep_result](screenshots/image.png)
 
-**1. For each line: your prediction, the real output, and one sentence if they differ.**
+![changed_code](screenshots/image-1.png)
 
-![real_outputs](screenshots/image-6.png)
+![sleep_execution](screenshots/image-2.png)
 
-| Command           | My Predictions            | Real output           | Explanation (if different) |
-|----------         |----------                 |----------             |----------|
-| `echo *.c`        | `a.c b.c`                 | `a.c b.c`             |----------|
-| `echo file?.txt`  | `file1.txt file2.txt`     | `file1.txt file2.txt` |----------|
-| `echo [a-b]*`     | `a.c  'alfa beta.txt'   b.c `     | `a.c alfa beta.txt b.c` | I did not expect it to strip quotes|
-| `echo *.xyz`      | Nothing     | `*.xyz` | I forgot it prints the name as-is if it's not found|
-| `ls alfa beta.txt`  | An error | `ls: cannot access 'alfa': No such file or directory`<br>`ls: cannot access 'beta.txt': No such file or directory` | I did not know the exact error message but predicted the general output|
-| `ls "alfa beta.txt"`      | `alfa beta.txt`     | `'alfa beta.txt'` | It added quotes|
-| `ls "alfa beta.txt"`      | `$HOME /home/vboxuser $HOME`     | `$HOME /home/vboxuser $HOME` |----------|
-| `echo {1..5} ; echo $((7 * 6))`      | `1 2 3 4 5` <br> `42`     | `1 2 3 4 5` <br> `42` |----------|
-| `echo "today is $(date +%A), I am $(whoami)"`      | `today is Monday, I am vboxuser`     | `today is Monday, I am vboxuser` |----------|
-| `touch log{1..3}.txt && ls log*`      | `log1.txt  log2.txt  log3.txt`     | `log1.txt  log2.txt  log3.txt` |----------|
-
----
-
-**2.  `echo` knows nothing about files, yet `echo *.c` printed file names. Who produced them?**
-
-![globbing](screenshots/image-7.png)
-
-It's the shell, it does globbing.
-
----
-
-**3. Why did `ls alfa beta.txt` fail? Give two different ways to fix it.**
-
-![ls_error_fixes](screenshots/image-8.png)
-
-It failed because the name of the file was given by spaces and thus was treated as two arguments, `alfa` and `beta.txt`.
-
-To fix it, use double quotes(`ls "alfa beta.txt"`) or single quotes(`ls 'alfa beta.txt'`) or with backslash(`ls alfa\ beta.txt`).
-
----
-
-**4. What is the difference between single and double quotes?**
-
-![single_double_quotes](screenshots/image-9.png)
-
-- 'single quotes' stop everything: the text is taken literally.
-- "double quotes" keep spaces but still expand `$variables`.
-
----
-
-## Part 3. Redirection, chaining and jobs
+## Part 2. bash versus the xv6 shel
 
 ### Observations
 
-**1. Which file got the error message, and which got the listing?**
+![bash_execution](screenshots/image-3.png)
 
-![outputs_error_listings](screenshots/image-10.png)
+![xv6_execution](screenshots/image-4.png)
 
-`out.txt` got the listing and `err.txt` got the error message.
-
----
-
-**2. What is the difference between `> all.txt 2>&1` and `2>&1 > all.txt` ? Try both and explain why the result differs.**
-
-![order_redirections](screenshots/image-11.png)
-
-In the case of `> all.txt 2>&1`, the `file descriptor 1` is pointing to `all.txt`, while in the case of `2>&1 > all.txt`, the `file descriptor 1` points to the terminal.
-
----
-
-**3. Why does `wc -l < access.log` print only a number, while `wc -l access.log` also prints the file name?**
-
-![wc_access_log](screenshots/image-12.png)
-
-In the case of `wc -l < access.log`, the shell opens `access.log` and passes its content to `stdin` of `wc`, `wc` has no filename argument. While in the case of `wc -l access.log`, `wc` opens `access.log` itself, knows the name and prints both.
+| Command | Tests | bash | xv6 |
+|---|---|---|---|
+| echo hello > f ; cat < f | redirection |  `hello` |  `hello` |
+| ls \| grep READ | pipe |  `README` |  `README 2 2 2441` |
+| (echo a; echo b) \| wc | grouping, list |  `2 2 4` |  `2 2 4` |
+| echo one ; echo two | sequence | `one`<br>`two` | `one`<br>`two` |
+| echo bg & | background |  runs, then `[1]+ Done` |  runs, no job message (prompt prints before `bg`) |
+| ls * | globbing |  `README f` |  `ls: cannot open *` |
+| echo $HOME | variables |  `/home/vboxuser` |  prints `$HOME` literally |
+| echo "a b" | quotes |  prints `a b` |  prints `"a b"` with the quotes |
+| mkdir d ; cd d ; ls .. | PATH |  `README d f` |  `exec cd failed` |
+| arrow up, Tab, Ctrl+R | history, completion |  |  |
 
 ---
 
-**4.  Explain each operator in one sentence: ; && || .**
 
-![chaining_operators](screenshots/image-13.png)
+**1. List the features both shells have, and the ones only bash has.**
 
-- `;` run the next one no matter what.
-- `&&` run the next one only if this one succeeded (exit code 0).
-- `||` run the next one only if this one failed.
+**Similarities:**
+- Both have redirections (`<`);
+- Both support pipes (`|`);
+- Both have `grep`;
+- Both have `;` `&` and `( )`.
 
-![run_background_job_kill](screenshots/image-14.png)
+**Differences:**
+- xv6 lacks globbing;
+- xv6 lacks variables;
+- xv6 lacks quotes;
+- xv6 lacks history;
+- xv6 lacks Tab;
+- xv6 lacks PATH;
 
 ---
 
-## Part 4. Answer questions with one-liners
+**2. In xv6, ls stops working after cd d. Why? Find a way to run ls from inside d anyway.**
+
+![ls_fail](screenshots/image-5.png)
+
+In xv6, the shell finds programs by exec’ing the name as a path relative to the current directory. To still execute, `/ls` can be used.
+
+![working_ls](screenshots/image-6.png)
+
+---
+
+**3. Which missing feature would you miss most in daily work, and which would be easiest to add?**
+
+I would miss `history`. The easiest feature to add is `quotes`.
+
+---
+
+## Part 3. Who expands \*? A program that prints its arg
 
 ### Observations
 
-**1. How many requests failed?**
+![U_progs_and_args_c](screenshots/image-7.png)
 
-![count_fail_requests](screenshots/image-15.png)
+![xv6_output](screenshots/image-8.png)
 
-Command used: `grep FAIL access.log | wc -l`
+![bash_output](screenshots/image-9.png)
 
-`grep FAIL access.log | wc -l`.
+**1. Paste both outputs for args \*.c "x y" . How many arguments did each program receive?**
 
----
+`Bash`: 8 arguments.
+```
+argc = 8
+argv[0] = [./args]
+argv[1] = [args_linux.c]
+argv[2] = [bio.c]
+argv[3] = [exec.c]
+argv[4] = [file.c]
+argv[5] = [kalloc.c]
+argv[6] = [log.c]
+argv[7] = [x y]
+```
 
-**2. How many different pages were requested, and which?**
-
-![diff_pages_which](screenshots/image-16.png)
-
-Command used: `cut -d' ' -f5 access.log | sort | uniq -c | sort -rn | tee /dev/stderr | wc -l`
-
-There are 4 distinct pages: `/page0`, `/page1`, `/page2`, `/page3`.
-
----
-
-**3. How many requests did each page get?**
-
-![diff_pages_which](screenshots/image-16.png)
-
-
-Command used: `cut -d' ' -f5 access.log | sort | uniq -c | sort -rn | tee /dev/stderr | wc -l`
-
-Each page got 125 requests.
-
----
-
-**4. Which user or users have the most failed requests, and how many?**
-
-![user_fails](screenshots/image-17.png)
-
-
-Command used: `grep FAIL access.log | cut -d' ' -f3 | sort | uniq -c | sort -rn`
-
-`user5` and `user3` have the most failed requests, totalling 15.
+`xv6`: 4 arguments.
+```
+$ argc = 4
+argv[0] = [args]
+argv[1] = [*.c]
+argv[2] = ["x]
+argv[3] = [y"]
+```
 
 ---
 
-**5. How many requests did user3 make, and how many of them failed?**
+**2. So who turns \*.c into file names and removes the quotes: the program, the kernel, or the shell?**
 
-![user3_requests](screenshots/image-18.png)
-
-Command used: `grep user3 access.log | cut -d' ' -f4 | sort | uniq -c`
-
-- `FAIL`: 15;
-- `OK`: 57.
+The `shell`.
 
 ---
 
-**6. Print the last 3 failed requests, showing only time and user.**
+**3. What happened to the extra spaces in one two three ?**
 
-![last_three_fails](screenshots/image-20.png)
-
-Command used: `grep FAIL access.log | tail -3 | cut -d' ' -f1,2,3`
+They were ignored.
 
 ---
 
-**7. Which login shells appear in /etc/passwd, and how many accounts use each? (field 7, separator :)**
-
-![login_shells](screenshots/image-21.png)
-
-Command used: `cut -d: -f7 /etc/passwd | sort | uniq -c | sort -rn`
-
----
-
-**8. PREDICT, then explain: why do `ls /etc | wc -l` and `ls -l /etc | wc -l` differ by exactly one?**
-
-![diff_by_one](screenshots/image-22.png)
-
-The `ls -l /etc` also prints one line for `total`.
-
----
-
-## Part 5. Your first script
+## Part 4. Read the shell
 
 ### Observations
 
-![contents_report_sh](screenshots/image-23.png)
-![successful_run](screenshots/image-24.png)
-![failed_run](screenshots/image-25.png)
+![command_kinds](screenshots/image-10.png)
+![where_each_command_runs](screenshots/image-11.png)
+![cd_handling](screenshots/image-12.png)
+
+**1. Name the five kinds of command the xv6 shell knows and the character that produces each.**
+
+| Type | Meaning | Produced by |
+|---|---|---|
+| `EXEC` | a plain command with its arguments | just words, e.g. `echo hi` (no special character) |
+| `REDIR` | a command with redirected input or output | `<`, `>`, `>>` |
+| `PIPE` | left command's output feeds the right | `\|` |
+| `LIST` | run one command, then the next | `;` |
+| `BACK` | run in the background | `&` |
+
+---
+
+**2. Where is cd handled, and why is it not run as a separate program?**
+
+The only match for cd is at line 170, in main(). The shell checks if the input line starts with cd and calls chdir() itself, before it forks. A failure prints cannot cd ....
+
+It can’t be a separate program because a working directory belongs to a process. When the shell runs a command, it forks a child and the child execs the program. If cd were an external program, it would change its own directory and then exit, leaving the shell’s directory unchanged. So cd has to be a built-in that runs in the shell process.
+
+---
+
+**3. Search sh.c for any code that handles `*`or `$`. What does that explain about Part 2?**
+
+There is none. The tokenizer’s special-character cases (lines 284-294) cover only `|`, `(`, `)`, `;`, `&`, `<`, `>` (plus `>>` at 397). Nothing handles `*`, `$`, or `"`.
+
+
+---
